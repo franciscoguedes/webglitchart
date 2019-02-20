@@ -1,6 +1,0 @@
-	
-old .effectname	
-	position: relative;
-	transform: translate(50%, 90%);
-	font-size: 72px;
-	mix-blend-mode: difference;

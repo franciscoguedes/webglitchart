@@ -1,14 +1,14 @@
 html, body { height: 100%; padding: 0; margin: 0; }
 div.container { width: 50%; height: 50%; float: left; }
-#topleft { background-image: url(images/topleft.png); }
+#topleft { background-image: url(images/japanify.png); }
 #botleft { background-image: url(images/botleft.jpg);}
 #topright { background-image: url(images/topright.jpeg);}
 #botright { background-image: url(images/botright.jpg);}
 #topleft1 { background-image: url(images/topleft1.jpg);}
 #topright1 { background-image: url(images/topright1.jpeg);}
 
+
 .container {
-	text-align: center;
     background-size: cover;
     background-position: center;
   	display: flex;
