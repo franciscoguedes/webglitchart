@@ -1,0 +1,64 @@
+html{
+	background-color: #f9f9f9;
+}
+
+body{
+	margin: 0;
+	padding: 0;
+}
+
+
+@font-face{
+    font-family: 'Decima Mono Pro';
+    src: url('fonts/DecimaMonoPro.otf');
+} 
+
+@font-face{
+    font-family: 'Decima Mono Pro - Bold';
+    src: url('fonts/DecimaMonoPro-Bold.otf');
+} 
+#text{
+	font-family: "Decima Mono Pro";
+	position: relative;
+	left: 50%;
+	width: 40%;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 2%;
+	margin-bottom: 2%;
+	background-color: yellow;
+	padding-left: 2%;
+	padding-right: 2%;
+	padding-top: 2%;
+	padding-bottom: 2%;
+}
+
+#effect_background{
+	position: sticky;
+	top: 0;
+	background-size: cover;
+	z-index: 100;
+}
+
+
+#effect_name{
+	font-family: "Decima Mono Pro - Bold";
+	position: relative;
+	top: 50%;
+	padding-left: 2%;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+form{
+	position: relative;
+	left: 50%;
+	width: 20%;
+	background-color: transparent;
+}
+
+a {
+	font-family: "Decima Mono Pro";
+}

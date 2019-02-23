@@ -7,6 +7,10 @@ div.container { width: 50%; height: 50%; float: left; }
 #topleft1 { background-image: url(images/topleft1.jpg);}
 #topright1 { background-image: url(images/topright1.jpeg);}
 
+@font-face{
+    font-family: 'Decima Mono Pro';
+    src: url('fonts/DecimaMonoPro.otf');
+} 
 
 .container {
     background-size: cover;
@@ -22,15 +26,22 @@ div.container { width: 50%; height: 50%; float: left; }
 .linkbox{
 	display: none;
 	margin: auto;
+	padding: 15px 0px 15px 0px;
+	border: 2px solid black;
+
 }
 
-.effectname{	
+
+
+
+.effectname{
+	font-family: "Decima Mono Pro";
+	padding: 15px 15px 15px 15px;	
 	background-color: white;
-	font-family: Arial;
-	font-size: 5vw; 
-	font-weight: bold;
+	font-size: 5vw;
 	color: black;
 	text-decoration: none;
 	mix-blend-mode: difference;
 }
+
 
