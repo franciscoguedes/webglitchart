@@ -26,9 +26,9 @@ div.container { width: 50%; height: 50%; float: left; }
 .linkbox{
 	display: none;
 	margin: auto;
-	padding: 15px 0px 15px 0px;
+	padding-top: 4px;
+	padding-bottom: 4px;
 	border: 2px solid black;
-
 }
 
 

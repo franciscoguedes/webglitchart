@@ -44,6 +44,7 @@ body{
 #effect_name{
 	font-family: "Decima Mono Pro - Bold";
 	position: relative;
+	font-size: 3vw;
 	top: 50%;
 	padding-left: 2%;
 	padding-top: 1%;
@@ -57,6 +58,12 @@ form{
 	left: 50%;
 	width: 20%;
 	background-color: transparent;
+	font-family: "Decima Mono Pro";
+
+}
+
+label{
+	font-family: "Decima Mono Pro";
 }
 
 a {

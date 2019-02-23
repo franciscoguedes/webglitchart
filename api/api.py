@@ -1,7 +1,7 @@
 import glob
 import os
 import time
-
+import json
 from flask import Flask, request, send_file
 
 app = Flask(__name__)
@@ -9,9 +9,14 @@ app = Flask(__name__)
 ALLOWED_EXTENSIONS = ['pdf', 'png', 'jpg', 'jpeg']
 
 
-@app.route('/effect<int:number>/uploader', methods=['GET', 'POST'])
+@app.route('/effect<int:number>/upload', methods=['GET', 'POST'])
 def upload_file(number):
     if request.method == 'POST':
+        input = request.form
+        try:
+            form = {'filename': input['filename'], 'iterations': input['iterations'], 'privacy': input['privacy']}
+        except:
+            form = {'filename': input['filename'], 'iterations': input['iterations'], 'privacy': 'n'}
         f = request.files['file']
         if f is None:
             return 'no upload'
@@ -26,7 +31,7 @@ def upload_file(number):
                 os.path.join('..', 'imagedb', 'effect' + str(number) + '_' + id + '.' + f.filename.split(".")[-1]))
             link = '<a href=' + '"http://193.136.167.233:5000/images/download/' + id + '">' + 'Download Image' + '</a>' + '<br>'
 
-            return 'file uploaded with ' + id + '\n' + link
+            return 'file uploaded with ' + id + '\n' + link + str(form)
 
 
 @app.route('/effect<int:number>/images', methods=['GET'])
