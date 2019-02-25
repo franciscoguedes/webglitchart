@@ -13,25 +13,38 @@ ALLOWED_EXTENSIONS = ['pdf', 'png', 'jpg', 'jpeg']
 def upload_file(number):
     if request.method == 'POST':
         input = request.form
-        try:
-            form = {'filename': input['filename'], 'iterations': input['iterations'], 'privacy': input['privacy']}
-        except:
-            form = {'filename': input['filename'], 'iterations': input['iterations'], 'privacy': 'n'}
-        f = request.files['file']
-        if f is None:
-            return 'no upload'
-        if f.filename.split(".")[-1] not in ALLOWED_EXTENSIONS:
-            return 'file not uploaded - extension error'
-        else:
-            id = str(time.time()).split('.')[0]
-            filename = '../imagedb/effect' + str(number) + '_' + id + '.' + f.filename.split(".")[-1]
-            f.save(filename)
-            os.system('python3 ../effects/japanify.py ' + filename)
-            os.remove(
-                os.path.join('..', 'imagedb', 'effect' + str(number) + '_' + id + '.' + f.filename.split(".")[-1]))
-            link = '<a href=' + '"http://193.136.167.233:5000/images/download/' + id + '">' + 'Download Image' + '</a>' + '<br>'
+        file = request.files['file']
+        file_extension = file.filename.split(".")[-1]
 
-            return 'file uploaded with ' + id + '\n' + link + str(form)
+        if file is None:
+            return 'no upload'
+
+        if file_extension not in ALLOWED_EXTENSIONS:
+            return 'file not uploaded - extension error'
+
+        else:
+            folder_id = str(time.time()*10).split('.')[0]
+            try:
+                folder_name = folder_id + "_" + input['privacy']
+            except KeyError:
+                folder_name = folder_id + "_n"
+            os.makedirs(os.path.join(os.getcwd(), '..',
+                                     'effects_applied',
+                                     folder_name))
+
+            filename = os.path.join(os.getcwd(), '..',
+                                    'effects_applied',
+                                    folder_name,
+                                    str(number) + '_' + '0' + '.' + file_extension)
+            file.save(filename)
+            os.system('python3 ../effects/japanify.py ' + filename +
+                      ' --threshold ' + input['density'] +
+                      ' --iterations ' + input['iterations'] +
+                      ' --final_name ' + input['filename'] +
+                      ' --folder ' + folder_name)
+            link = '<a href=' + '"http://193.136.167.233:5000/images/download/' + folder_id + '">' + 'Download Image' + '</a>' + '<br>'
+
+            return 'file uploaded with folder id' + folder_id + '\n' + link + str(input)
 
 
 @app.route('/effect<int:number>/images', methods=['GET'])

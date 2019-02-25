@@ -26,9 +26,6 @@ div.container { width: 50%; height: 50%; float: left; }
 .linkbox{
 	display: none;
 	margin: auto;
-	padding-top: 4px;
-	padding-bottom: 4px;
-	border: 2px solid black;
 }
 
 
@@ -36,6 +33,7 @@ div.container { width: 50%; height: 50%; float: left; }
 
 .effectname{
 	font-family: "Decima Mono Pro";
+	border: 3px solid black;
 	padding: 15px 15px 15px 15px;	
 	background-color: white;
 	font-size: 5vw;
