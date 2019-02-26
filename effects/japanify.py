@@ -18,17 +18,13 @@ def main():
     list(tqdm(japanify(img, args.threshold), total=img_height))
 
     img_source = img.filename
-    print('IMG SOURCE: ' + img_source)
-          #img_source.split(sep())[-1].replace(img_source.split(sep())[-1].split['.'][-1],
-           #                                                           '.' + img.format.lower()))
     destination_image = img_source.replace(basename(img_source), '1_' + str(int(basename(img_source).split('_')[-1][0]) + 1) + '.' + img.format.lower())
-    print('DESTINATION IMAGE: ' + destination_image)
 
 
 
-    print('img format: ' + img.format)
 
     img.save(destination_image)
+    print('OK')
 
 
 def parse_args():

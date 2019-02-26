@@ -13,10 +13,8 @@ def upload_file(number):
     if request.method == 'POST':
         input = request.form
         file = request.files['file']
-        original_file_name = os.path.basename(file.filename).replace('.' + os.path.basename(file.filename), '') #TODO REMOVER A EXTENSAO DAQUI
-        print('BASE NAME: ' + os.path.basename(file.filename))
-        print("ORIGINAL FILE NAME: " + original_file_name)
         file_extension = file.filename.split(".")[-1]
+        original_file_name = os.path.basename(file.filename).replace('.' + file_extension, '')
 
         if file is None:
             return 'no upload'
@@ -42,15 +40,17 @@ def upload_file(number):
             file.save(filename)
 
             for iteration in range(int(input['iterations']) + 1):
+
                 if iteration > 0:
-                    print(glob.glob(os.path.join('..', 'effects_applied',
-                                                 folder_name,
-                                                 str(number) + '_' + '*')))
-                    file_extension = glob.glob(os.path.join('..',
-                                                            'effects_applied',
-                                                            folder_name,
-                                                            str(number) + '_' + '*'))[0].split('.')[-1]
-                print('FILE EXTENSION: ' + file_extension)
+                    all_files = []
+                    for i in glob.glob(os.path.join('..', 'effects_applied',
+                                                    folder_name,
+                                                    str(number) + '_' + '*')):
+                        all_files.append(os.path.basename(i))
+
+                    all_files.sort(key=lambda x: int(x.split('_')[1].split('.')[0]))
+                    file_extension = str(all_files[-1]).split('.')[-1]
+
                 if number == 1: #japanify
                     os.system('python3 ../effects/japanify.py ' + filename +
                               ' --threshold ' + input['density'])
@@ -64,13 +64,13 @@ def upload_file(number):
                                                  '..',
                                                  'effects_applied',
                                                  folder_name,
-                                                 input['filename']))
+                                                 input['filename'] + '.' + file_extension))
             except:
                 os.rename(filename, os.path.join(os.getcwd(),
                                                  '..',
                                                  'effects_applied',
                                                  folder_name,
-                                                 original_file_name))
+                                                 original_file_name + '.' + file_extension))
 
 
 
