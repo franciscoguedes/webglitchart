@@ -2,6 +2,7 @@
 import argparse
 from PIL import Image
 from os.path import basename, join
+from os import sep
 try:
     from tqdm import tqdm
 except ImportError:  # optional dependency, simply print a X/Y ratio on each step else
@@ -12,29 +13,22 @@ except ImportError:  # optional dependency, simply print a X/Y ratio on each ste
 
 def main():
     args = parse_args()
+    img = Image.open(args.source_image)
+    img_height = img.size[1]
+    list(tqdm(japanify(img, args.threshold), total=img_height))
+
+    img_source = img.filename
+    print('IMG SOURCE: ' + img_source)
+          #img_source.split(sep())[-1].replace(img_source.split(sep())[-1].split['.'][-1],
+           #                                                           '.' + img.format.lower()))
+    destination_image = img_source.replace(basename(img_source), '1_' + str(int(basename(img_source).split('_')[-1][0]) + 1) + '.' + img.format.lower())
+    print('DESTINATION IMAGE: ' + destination_image)
 
 
-    for iteration in range(1, args.iterations + 1):
-        if iteration == 1:
-            img = Image.open(args.source_image)
-        else:
-            try:
-                img = Image.open(destination_image)
-            except:
-                None
-        destination_image = join('../effects_applied/',
-                                 args.folder,
-                                 basename(img.filename).replace('_' + str(iteration-1) + '.', '_' + str(iteration) + '.'))
 
+    print('img format: ' + img.format)
 
-        img_height = img.size[1]
-        list(tqdm(japanify(img, args.threshold), total=img_height))
-        print(args.final_name)
-
-        if iteration == args.iterations + 1 and args.final_name != '':
-            img.save(args.final_name+img.format)
-
-        img.save(destination_image)
+    img.save(destination_image)
 
 
 def parse_args():
@@ -42,10 +36,6 @@ def parse_args():
     parser.add_argument('source_image')
     parser.add_argument('--threshold', type=int, default=20,
                         help='change for higher/lower line density')
-    parser.add_argument('--iterations', type=int, default=1,
-                        help='number of times you want to apply the effect')
-    parser.add_argument('--final_name', type=str, help='final image file name')
-    parser.add_argument('--folder', type=str, help='folder where I am going to save the multiple copies')
     return parser.parse_args()
 
 

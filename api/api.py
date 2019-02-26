@@ -1,7 +1,6 @@
 import glob
 import os
 import time
-import json
 from flask import Flask, request, send_file
 
 app = Flask(__name__)
@@ -14,6 +13,9 @@ def upload_file(number):
     if request.method == 'POST':
         input = request.form
         file = request.files['file']
+        original_file_name = os.path.basename(file.filename).replace('.' + os.path.basename(file.filename), '') #TODO REMOVER A EXTENSAO DAQUI
+        print('BASE NAME: ' + os.path.basename(file.filename))
+        print("ORIGINAL FILE NAME: " + original_file_name)
         file_extension = file.filename.split(".")[-1]
 
         if file is None:
@@ -28,21 +30,51 @@ def upload_file(number):
                 folder_name = folder_id + "_" + input['privacy']
             except KeyError:
                 folder_name = folder_id + "_n"
-            os.makedirs(os.path.join(os.getcwd(), '..',
+
+            os.makedirs(os.path.join('..',
                                      'effects_applied',
                                      folder_name))
 
-            filename = os.path.join(os.getcwd(), '..',
+            filename = os.path.join('..',
                                     'effects_applied',
                                     folder_name,
                                     str(number) + '_' + '0' + '.' + file_extension)
             file.save(filename)
-            os.system('python3 ../effects/japanify.py ' + filename +
-                      ' --threshold ' + input['density'] +
-                      ' --iterations ' + input['iterations'] +
-                      ' --final_name ' + input['filename'] +
-                      ' --folder ' + folder_name)
-            link = '<a href=' + '"http://193.136.167.233:5000/images/download/' + folder_id + '">' + 'Download Image' + '</a>' + '<br>'
+
+            for iteration in range(int(input['iterations']) + 1):
+                if iteration > 0:
+                    print(glob.glob(os.path.join('..', 'effects_applied',
+                                                 folder_name,
+                                                 str(number) + '_' + '*')))
+                    file_extension = glob.glob(os.path.join('..',
+                                                            'effects_applied',
+                                                            folder_name,
+                                                            str(number) + '_' + '*'))[0].split('.')[-1]
+                print('FILE EXTENSION: ' + file_extension)
+                if number == 1: #japanify
+                    os.system('python3 ../effects/japanify.py ' + filename +
+                              ' --threshold ' + input['density'])
+
+                    filename = os.path.join('..',
+                                            'effects_applied',
+                                            folder_name,
+                                            str(number) + '_' + str(iteration) + '.' + file_extension)
+            try:
+                os.rename(filename, os.path.join(os.getcwd(),
+                                                 '..',
+                                                 'effects_applied',
+                                                 folder_name,
+                                                 input['filename']))
+            except:
+                os.rename(filename, os.path.join(os.getcwd(),
+                                                 '..',
+                                                 'effects_applied',
+                                                 folder_name,
+                                                 original_file_name))
+
+
+
+            link = '<a href=' + '"http://193.136.167.233:5000/images/download/' + folder_id[:-2] + '">' + 'Download Image' + '</a>' + '<br>'
 
             return 'file uploaded with folder id' + folder_id + '\n' + link + str(input)
 
