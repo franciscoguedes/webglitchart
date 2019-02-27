@@ -31,10 +31,12 @@ def upload_file(number):
 
             os.makedirs(os.path.join('..',
                                      'effects_applied',
+                                     'effect_' + str(number),
                                      folder_name))
 
             filename = os.path.join('..',
                                     'effects_applied',
+                                    'effect_' + str(number),
                                     folder_name,
                                     str(number) + '_' + '0' + '.' + file_extension)
             file.save(filename)
@@ -44,6 +46,7 @@ def upload_file(number):
                 if iteration > 0:
                     all_files = []
                     for i in glob.glob(os.path.join('..', 'effects_applied',
+                                                    'effect_' + str(number),
                                                     folder_name,
                                                     str(number) + '_' + '*')):
                         all_files.append(os.path.basename(i))
@@ -57,26 +60,27 @@ def upload_file(number):
 
                     filename = os.path.join('..',
                                             'effects_applied',
+                                            'effect_' + str(number),
                                             folder_name,
                                             str(number) + '_' + str(iteration) + '.' + file_extension)
             try:
                 os.rename(filename, os.path.join(os.getcwd(),
                                                  '..',
                                                  'effects_applied',
+                                                 'effect_' + str(number),
                                                  folder_name,
                                                  input['filename'] + '.' + file_extension))
-            except:
+            except KeyError:
                 os.rename(filename, os.path.join(os.getcwd(),
                                                  '..',
                                                  'effects_applied',
+                                                 'effect_' + str(number),
                                                  folder_name,
                                                  original_file_name + '.' + file_extension))
 
+            link = '<a href=' + '"http://0.0.0.0:5000/images/download/' + folder_name + '">' + 'Download Image' + '</a>' + '<br>'
 
-
-            link = '<a href=' + '"http://193.136.167.233:5000/images/download/' + folder_id[:-2] + '">' + 'Download Image' + '</a>' + '<br>'
-
-            return 'file uploaded with folder id' + folder_id + '\n' + link + str(input)
+            return 'file uploaded with folder id' + folder_id + '\n' + link + '\n' + str(input)
 
 
 @app.route('/effect<int:number>/images', methods=['GET'])
@@ -86,7 +90,7 @@ def get_images(number):
 
 @app.route('/images', methods=['GET'])
 def get_all_images():
-    return str(glob.glob('../effects_applied/*'))
+    return str(glob.glob('../effects_applied/*_y'))
 
 
 @app.route('/images/download', methods=['GET'])
