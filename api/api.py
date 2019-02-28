@@ -36,56 +36,59 @@ def upload_file(number):
 
             effect_apply(number, folder_name, filename, dir, input, original_file_name, file_extension)
 
-            json_name_manager(folder_id, input['filename'])
+            json_name_manager(folder_id, input['filename'], number)
 
             link = '<a href=' + '"http://0.0.0.0:5000/images/download/' + folder_name + '">' + 'Download Image' + '</a>' + '<br>'
             return 'file uploaded with folder id' + folder_id + '\n' + link + '\n' + str(input)
 
 
 @app.route('/effect<int:number>/images', methods=['GET'])
-def get_images(number):
-    return str(glob.glob('../effects_applied/effect' + str(number) + '*'))
+def get_effect_images(number):
+    dict = get_dict_image(number)
+    link = ''
+    for key in dict:
+        link += '<a href="http://0.0.0.0:5000/images/download/' + dict[key] + '">' + str(key) + '</a> <br>'
+    return link
 
 
 @app.route('/images', methods=['GET'])
 def get_all_images():
-    return str(glob.glob('../effects_applied/*_y'))
-
+    result = ''
+    for i in range(1, 6):
+        result += get_effect_images(i)
+    return result
 
 @app.route('/images/download', methods=['GET'])
 def show_all_downloadable_images():
     result = ""
     for dir in glob.glob('../effects_applied/*'):
         file_id = dir.split("_")[-1].split(".")[0]
-        result += (
-                    '<a href=' + '"http://193.136.167.233:5000/images/download/' + file_id + '">' + file_id + '</a>' + '<br>')
+        result += ('<a href=' + '"http://193.136.167.233:5000/images/download/' + file_id + '">' + file_id + '</a>' + '<br>')
     return result
 
 
-@app.route('/images/download/<int:id>', methods=['GET'])
-def download_image(id):
-    return send_file(str(glob.glob('../effects_applied/*' + str(id) + '*')[0]))
-
-
-@app.route('/images/download/effect<int:number>', methods=['GET'])
-def show_all_downloadable_images_by_effect(number):
-    result = ""
-    for dir in glob.glob('../effects_applied/effect' + str(number) + '*'):
-        file_id = dir.split("_")[-1].split(".")[0]
-        result += (
-                    '<a href=' + '"http://193.136.167.233:5000/images/download/' + file_id + '">' + file_id + '</a>' + '<br>')
-    return result
+#@app.route('/images/download/<int:id>', methods=['GET'])
+#def download_image(id):
+    #final_dict = {}
+    #for effect_number in range(1, get_number_of_effects()+1):
+    #return send_file(str(glob.glob('../effects_applied/' + str(id) + '_*')[0]))
 
 
 def generate_folder_id():
     return str(time.time()*10).split('.')[0]
 
 
-def json_name_manager(folder_id, filename):
+def get_json_content():
+    with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r') as json_file:
+        json_decoded = json.load(json_file)
+    return json_decoded
+
+
+def json_name_manager(folder_id, filename, effect_number):
     with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r') as json_file:
         json_decoded = json.load(json_file)
 
-    json_decoded['names'][folder_id] = filename
+    json_decoded['names'][folder_id] = [effect_number, filename]
 
     with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'w') as json_file:
         json.dump(json_decoded, json_file)
@@ -119,6 +122,7 @@ def effect_apply(number, folder_name, filename, dir, form, original_file_name, f
     except KeyError:
         os.rename(filename, os.path.join(dir, folder_name, original_file_name + '.' + file_extension))
 
+
 def json_file_setup():
     try:
         open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r')
@@ -126,6 +130,31 @@ def json_file_setup():
         with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'w') as json_file:
             json.dump({'names': {}}, json_file)
 
+
+def get_number_of_effects():
+    return len(glob.glob(os.path.join('..', 'effects_applied'))) - 1
+
+
+def get_final_images_in_dir(number):
+    all_files = glob.glob(os.path.join('..', 'effects_applied', 'effect_' + str(number), '*' + '_y', '*'))
+    names = get_json_content()
+    result = []
+    for file in all_files:
+        for id in names["names"].keys():
+            if os.path.basename(file).split('.')[0] in names['names'][id] and file not in result:
+                result.append(file)
+    return result
+
+
+def get_dict_image(number):
+    images = get_final_images_in_dir(number)
+    dict = {}
+    for image in images:
+        folder_name = image.split(os.sep)[-2]
+        folder_privacy = folder_name.split('_')[-1]
+        if folder_privacy == 'y':
+            dict[os.path.basename(image).split('.')[0]] = str(folder_name)
+    return dict
 
 if __name__ == "__main__":
     json_file_setup()
