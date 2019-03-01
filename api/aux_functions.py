@@ -1,30 +1,71 @@
 import glob
+import json
 import os
 import time
-import json
 
 
 def generate_folder_id():
     return str(time.time()*10).split('.')[0]
 
+# .json file management
+
 
 def get_json_content():
+    """
+    Gets all the data on name_manager.json file
+    :return: name_manager.json
+    """
     with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r') as json_file:
         json_decoded = json.load(json_file)
     return json_decoded
 
 
-def json_name_manager(folder_id, filename, effect_number):
+def json_name_manager(folder_id, folder_privacy, filename, effect_number):
+    """
+    Adds a new entry on name_manager.json file.
+    :param folder_id: folder id
+    :param filename: final filename
+    :param effect_number: effect number
+    :return: None
+    """
     with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r') as json_file:
         json_decoded = json.load(json_file)
 
-    json_decoded['names'][folder_id] = [effect_number, filename]
+    try:
+        json_decoded['names'][str(effect_number)]
+    except KeyError:
+        json_decoded['names'][str(effect_number)] = {}
+    json_decoded['names'][str(effect_number)][folder_id] = {'final_file': filename, 'privacy': folder_privacy}
 
     with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'w') as json_file:
         json.dump(json_decoded, json_file)
 
 
+def json_file_setup():
+    """
+    Checks if name_manager.json already exists, if it doesn't generates a new name_manager.json file
+    :return: None
+    """
+    try:
+        open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r')
+    except FileNotFoundError:
+        with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'w') as json_file:
+            json.dump({'names': {}}, json_file)
+
+
 def effect_apply(number, folder_name, filename, dir, form, original_file_name, file_extension):
+    """
+    Applies an effect to an image a certain number of times. After the final iteration renames the final file to a given
+    filename
+    :param number: effect number
+    :param folder_name: folder name where the image is
+    :param filename: image file name
+    :param dir: full relative path to image
+    :param form: website form input
+    :param original_file_name: original image name without the file extension
+    :param file_extension: original file extension
+    :return: None
+    """
     for iteration in range(1, int(form['iterations'])+1):
         #POSSIBLY CAN CHANGE THIS
         all_files = []
@@ -46,42 +87,78 @@ def effect_apply(number, folder_name, filename, dir, form, original_file_name, f
         if number == 4:  # efeito 4
             pass
 
-    try:
+    if form['filename'] != '':
         os.rename(filename, os.path.join(dir, folder_name, form['filename'] + '.' + file_extension))
-
-    except KeyError:
-        os.rename(filename, os.path.join(dir, folder_name, original_file_name + '.' + file_extension))
-
-
-def json_file_setup():
-    try:
-        open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r')
-    except FileNotFoundError:
-        with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'w') as json_file:
-            json.dump({'names': {}}, json_file)
+        return os.path.join(dir, folder_name, form['filename'] + '.' + file_extension)
+    else:
+        os.rename(filename, os.path.join(dir, folder_name, original_file_name + ' with effect' + '.' + file_extension))
+        return os.path.join(dir, folder_name, original_file_name + ' with effect' + '.' + file_extension)
 
 
 def get_number_of_effects():
+    """
+    Get the number of effects that already are known to the effect_applied folder
+    :return: number of effects
+    """
     return len(glob.glob(os.path.join('..', 'effects_applied', 'effect*')))
 
 
-def get_final_images_in_dir(number):
-    all_files = glob.glob(os.path.join('..', 'effects_applied', 'effect_' + str(number), '*' + '_y', '*'))
-    names = get_json_content()
-    result = []
-    for file in all_files:
-        for id in names["names"].keys():
-            if os.path.basename(file).split('.')[0] in names['names'][id][-1] and file not in result:
-                result.append(file)
+def get_final_images_in_folder(number, id):
+    """
+    Returns the relative path to the final image from a given folder id
+    :param number: effect number to get the final image
+    :param id: folder id to get the final image from
+    :return: relative path to the final image
+    """
+    return get_json_content()['names'][str(number)][str(id)]['final_file']
+
+
+def get_all_effect_images(number):
+    """
+    Returns a list with all the paths for the final image in a effect folder
+    :param number: effect number to get the final images
+    :return: list with final images
+    """
+    database = get_json_content()
+    result = {str(number): {}}
+    for folder_id in database['names'][str(number)]:
+        if database['names'][str(number)][str(folder_id)]['privacy'] == 'y':
+            result[str(number)][folder_id] = database['names'][str(number)][str(folder_id)]['final_file']
     return result
 
 
-def get_dict_image(number):
-    images = get_final_images_in_dir(number)
-    dict = {}
-    for image in images:
-        folder_name = image.split(os.sep)[-2]
-        folder_privacy = folder_name.split('_')[-1]
-        if folder_privacy == 'y':
-            dict[os.path.basename(image).split('.')[0]] = str(folder_name)
-    return dict
+def get_folder_privacy_by_id(id):
+    """
+    Given a folder name returns his privacy
+    :param id: folder id
+    :return: privacy value
+    """
+    names = get_json_content()
+    for effect_number in range(get_number_of_effects() + 1):
+        try:
+            return names['names'][effect_number][id]['privacy']
+        except KeyError:
+            pass
+
+
+def get_folder_privacy_by_full_path(path):
+    """
+    Given a full path returns folder's privacy
+    :param path: full path to a file inside the folder
+    :return: privacy value
+    """
+    return get_folder_privacy_by_id(path.split(os.sep)[-2])
+
+
+def get_folder_file_by_id(id):
+    """
+    Given a folder name returns his final filename
+    :param id: folder id
+    :return: final image filename
+    """
+    names = get_json_content()
+    for effect_number in range(get_number_of_effects() + 1):
+        try:
+            return names['names'][effect_number][id]['filename']
+        except KeyError:
+            pass
