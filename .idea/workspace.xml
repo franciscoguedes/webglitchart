@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f0fdae08-f55a-4645-9a79-373097ae15ab" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/api.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/aux_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/aux_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/effect1.html" beforeDir="false" afterPath="$PROJECT_DIR$/effect1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/effects/japanify.py" beforeDir="false" afterPath="$PROJECT_DIR$/effects/japanify.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,11 +15,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/api.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="576">
-              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+              <caret line="36" selection-start-line="36" selection-end-line="36" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
               </folding>
@@ -26,11 +27,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/aux_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="528">
-              <caret line="94" column="81" selection-start-line="94" selection-start-column="81" selection-end-line="94" selection-end-column="81" />
+            <state relative-caret-position="109">
+              <caret line="82" lean-forward="true" selection-start-line="82" selection-end-line="82" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/effects/japanify.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="384">
+              <caret line="22" column="27" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
+              <folding>
+                <element signature="e#1#16#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -50,14 +63,17 @@
       <find>194.210.220.222</find>
       <find>get_dict_image</find>
       <find>get_final_images_in_dir</find>
+      <find>name_manager</find>
     </findStrings>
     <replaceStrings>
       <replace>194.210.220.222</replace>
       <replace>193.136.167.233</replace>
       <replace>get_folder_images</replace>
+      <replace>database</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
+      <dir>$PROJECT_DIR$/api</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -75,8 +91,8 @@
         <option value="$PROJECT_DIR$/effect4.html" />
         <option value="/run/user/1000/gvfs/sftp:host=sigma.tecnico.ulisboa.pt/afs/.ist.utl.pt/users/1/6/ist190716/web/api/api.py" />
         <option value="$PROJECT_DIR$/effect1.html" />
-        <option value="$PROJECT_DIR$/effects/japanify.py" />
         <option value="$PROJECT_DIR$/api/api.py" />
+        <option value="$PROJECT_DIR$/effects/japanify.py" />
         <option value="$PROJECT_DIR$/api/aux_functions.py" />
       </list>
     </option>
@@ -105,6 +121,11 @@
               <item name="glitch_art" type="b2602c69:ProjectViewProjectNode" />
               <item name="glitch_art" type="462c0819:PsiDirectoryNode" />
               <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="glitch_art" type="b2602c69:ProjectViewProjectNode" />
+              <item name="glitch_art" type="462c0819:PsiDirectoryNode" />
+              <item name="effects" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -343,33 +364,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/api/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/effects/japanify.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+        <state relative-caret-position="384">
+          <caret line="22" column="27" selection-start-line="22" selection-start-column="27" selection-end-line="22" selection-end-column="27" />
           <folding>
             <element signature="e#1#16#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/aux_functions.py">
+    <entry file="file://$USER_HOME$/.local/lib/python3.6/site-packages/flask/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="94" column="81" selection-start-line="94" selection-start-column="81" selection-end-line="94" selection-end-column="81" />
+        <state relative-caret-position="614">
+          <caret line="2308" selection-start-line="2305" selection-end-line="2309" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/api/api.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="576">
-          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/aux_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="82" lean-forward="true" selection-start-line="82" selection-end-line="82" />
         </state>
       </provider>
     </entry>

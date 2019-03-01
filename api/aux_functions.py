@@ -12,23 +12,23 @@ def generate_folder_id():
 
 def get_json_content():
     """
-    Gets all the data on name_manager.json file
-    :return: name_manager.json
+    Gets all the data on database.json file
+    :return: database.json
     """
-    with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r') as json_file:
+    with open(os.path.join('..', 'effects_applied', 'database.json'), 'r') as json_file:
         json_decoded = json.load(json_file)
     return json_decoded
 
 
-def json_name_manager(folder_id, folder_privacy, filename, effect_number):
+def json_database(folder_id, folder_privacy, filename, effect_number):
     """
-    Adds a new entry on name_manager.json file.
+    Adds a new entry on database.json file.
     :param folder_id: folder id
     :param filename: final filename
     :param effect_number: effect number
     :return: None
     """
-    with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r') as json_file:
+    with open(os.path.join('..', 'effects_applied', 'database.json'), 'r') as json_file:
         json_decoded = json.load(json_file)
 
     try:
@@ -37,19 +37,19 @@ def json_name_manager(folder_id, folder_privacy, filename, effect_number):
         json_decoded['names'][str(effect_number)] = {}
     json_decoded['names'][str(effect_number)][folder_id] = {'final_file': filename, 'privacy': folder_privacy}
 
-    with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'w') as json_file:
+    with open(os.path.join('..', 'effects_applied', 'database.json'), 'w') as json_file:
         json.dump(json_decoded, json_file)
 
 
 def json_file_setup():
     """
-    Checks if name_manager.json already exists, if it doesn't generates a new name_manager.json file
+    Checks if database.json already exists, if it doesn't generates a new database.json file
     :return: None
     """
     try:
-        open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'r')
+        open(os.path.join('..', 'effects_applied', 'database.json'), 'r')
     except FileNotFoundError:
-        with open(os.path.join('..', 'effects_applied', 'name_manager.json'), 'w') as json_file:
+        with open(os.path.join('..', 'effects_applied', 'database.json'), 'w') as json_file:
             json.dump({'names': {}}, json_file)
 
 
@@ -68,17 +68,11 @@ def effect_apply(number, folder_name, filename, dir, form, original_file_name, f
     """
     for iteration in range(1, int(form['iterations'])+1):
         #POSSIBLY CAN CHANGE THIS
-        all_files = []
-        for i in glob.glob(os.path.join(dir, folder_name, str(number) + '_' + '*')):
-            all_files.append(os.path.basename(i))
-        #
-        all_files.sort(key=lambda x: int(x.split('_')[1].split('.')[0]))
-        file_extension = str(all_files[-1]).split('.')[-1]
-
+        working_folder = os.path.join(dir, folder_name, str(number))
         if number == 1:  # japanify
             os.system('python3 ../effects/japanify.py ' + filename +
                       ' --threshold ' + form['density'])
-
+            file_extension = get_last_extension(working_folder)
             filename = os.path.join(dir, folder_name, str(number) + '_' + str(iteration) + '.' + file_extension)
         if number == 2:  # efeito 2
             pass
@@ -94,6 +88,14 @@ def effect_apply(number, folder_name, filename, dir, form, original_file_name, f
         os.rename(filename, os.path.join(dir, folder_name, original_file_name + ' with effect' + '.' + file_extension))
         return os.path.join(dir, folder_name, original_file_name + ' with effect' + '.' + file_extension)
 
+
+def get_last_extension(folder):
+    all_files = []
+    for i in glob.glob(os.path.join(folder + '_' + '*')):
+        all_files.append(os.path.basename(i))
+
+    all_files.sort(key=lambda x: int(x.split('_')[1].split('.')[0]))
+    return get_file_extension(all_files[-1])
 
 def get_number_of_effects():
     """
@@ -162,3 +164,7 @@ def get_folder_file_by_id(id):
             return names['names'][effect_number][id]['filename']
         except KeyError:
             pass
+
+
+def get_file_extension(path):
+    return str(os.path.basename(path).split('.')[-1])

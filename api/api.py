@@ -33,7 +33,7 @@ def upload_file(number):
 
             final_path = effect_apply(number, folder_name, filename, dir, input, original_file_name, file_extension)
 
-            json_name_manager(folder_id, input['privacy'], final_path, number)
+            json_database(folder_id, input['privacy'], final_path, number)
 
             link = '<a href=' + '"http://0.0.0.0:5000/images/download/' + folder_id + '">' + 'Download Image' + '</a>' + '<br>'
             return 'file uploaded with folder id ' + folder_id + '<br>' + link

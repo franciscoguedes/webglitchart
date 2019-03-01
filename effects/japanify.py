@@ -20,6 +20,7 @@ def main():
     img_source = img.filename
     destination_image = img_source.replace(basename(img_source), '1_' + str(int(basename(img_source).split('_')[-1][0]) + 1) + '.' + img.format.lower())
 
+    print(destination_image)
     img.save(destination_image)
 
 
