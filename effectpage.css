@@ -53,14 +53,11 @@ body{
 	margin-top: 0;
 }
 
-form{
-	position: relative;
-	left: 50%;
-	width: 20%;
-	background-color: transparent;
-	font-family: "Decima Mono Pro";
-
+input{
+	margin: 1%;
 }
+
+
 
 label{
 	font-family: "Decima Mono Pro";
@@ -68,4 +65,44 @@ label{
 
 a {
 	font-family: "Decima Mono Pro";
+}
+
+form{
+	padding: auto;
+	height: 100%;
+	width: 100%;
+}
+
+.formContent{
+	position: relative;
+	background-color: #fefefe;
+	box-shadow: 0 1px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+	padding: calc(0.5vw + 0.5vh);
+	font-family: "Decima Mono Pro";
+	top: 10%;
+	left: calc(50vw - 200px - 0.5vw - 0.5vh );
+	height: 300px;
+}
+
+.form {
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.4);
+	height: 100%;
+	width: 100%;
+	display: none;
+	z-index: 1;
+}
+
+
+.btnCancel{
+	color: #000;
+	margin: 2%;
+	padding: 2%;
+	float: right;
+	font-size: 13px;
+}
+
+.btnCancel:hover{
+	text-decoration: none;
+	cursor: pointer;
 }
